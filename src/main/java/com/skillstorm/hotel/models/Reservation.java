@@ -16,6 +16,7 @@ import javax.validation.constraints.FutureOrPresent;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIdentityReference;
 
 @Entity
@@ -32,9 +33,10 @@ public class Reservation {
 	@Column(name = "roomnumber")
 	private int roomnumber;
 	
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne
 	@JoinColumn(name = "userid")
 	@JsonIdentityReference(alwaysAsId = true)
+//	@JsonBackReference
 	private User user;
 	
 	@FutureOrPresent

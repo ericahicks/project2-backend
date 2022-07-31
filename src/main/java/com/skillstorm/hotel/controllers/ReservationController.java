@@ -23,7 +23,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.skillstorm.hotel.models.Reservation;
+import com.skillstorm.hotel.models.User;
 import com.skillstorm.hotel.services.ReservationService;
+import com.skillstorm.hotel.services.UserService;
 
 @RestController 
 @CrossOrigin("*")
@@ -31,9 +33,13 @@ import com.skillstorm.hotel.services.ReservationService;
 public class ReservationController {
 	
 	private static final Logger log = LoggerFactory.getLogger(ReservationController.class);
+	private static final User DEFAULT_USER = new User(1, "No", "User", "+0 (000) 000-0000", "no@user.com", null);
 
 	@Autowired
 	ReservationService service;
+	
+	@Autowired
+	UserService userService;
 	
 	// find all
 	@GetMapping
@@ -68,6 +74,18 @@ public class ReservationController {
 	@ResponseStatus(HttpStatus.CREATED)
 	public Reservation create(@Valid @RequestBody Reservation reservation) {
 		log.debug("Creating reservations=" + reservation);
+		// Handle the inner user object before trying to save the reservation
+		// Foreign Key constraint says the user must be valid
+		User user = reservation.getUser();
+		if (user == null) {
+			reservation.setUser(DEFAULT_USER);
+		} else if (user.getId() == 0) { // no id, so create new user
+			user = userService.save(user);
+		} else { // has id, so assume the user exists in the db
+			User oldUser = userService.findById(user.getId());
+			// What if some of the fields don't match? Assume they do?
+			user = oldUser;
+		}
 		return service.save(reservation);
 	}
 	
@@ -76,6 +94,18 @@ public class ReservationController {
 	public Reservation update(@Valid @RequestBody Reservation reservation, @PathVariable int id) {
 		log.debug("Updating reservation with id=" + id + ", reservation=" + reservation);
 		reservation.setId(id);
+		// Handle the inner user object before trying to save the reservation
+		// Foreign Key constraint says the user must be valid
+		User user = reservation.getUser();
+		if (user == null) {
+			reservation.setUser(DEFAULT_USER);
+		} else if (user.getId() == 0) { // no id, so create new user
+			user = userService.save(user);
+		} else { // has id, so assume the user exists in the db
+			User oldUser = userService.findById(user.getId());
+			// What if some of the fields don't match? Assume they do?
+			user = oldUser;
+		}
 		return service.save(reservation);
 	}
 	

@@ -5,11 +5,18 @@ import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
+import org.springframework.stereotype.Service;
 
 import com.skillstorm.hotel.models.Reservation;
 import com.skillstorm.hotel.repositories.ReservationRepository;
 
+@Service
+@Primary
+@Transactional
 public class ReservationServiceImpl implements ReservationService {
 	
 	@Autowired
