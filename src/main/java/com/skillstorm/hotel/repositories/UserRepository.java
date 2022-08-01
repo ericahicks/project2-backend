@@ -14,12 +14,12 @@ import com.skillstorm.hotel.models.User;
 
 @Repository
 public interface UserRepository extends CrudRepository<User, Integer> {
-	
-	@Query("SELECT u FROM User u LEFT JOIN FETCH u.reservations")
-	public Iterable<User> findAll();
-
-	@Query("SELECT u FROM User u LEFT JOIN FETCH u.reservations WHERE u.id = ?1")
-	public Optional<User> findById(Integer id);
+//	
+//	@Query("SELECT u FROM User u LEFT JOIN FETCH u.reservations")
+//	public Iterable<User> findAll();
+//
+//	@Query("SELECT u FROM User u LEFT JOIN FETCH u.reservations WHERE u.id = ?1")
+//	public Optional<User> findById(Integer id);
 	
 	@Query("SELECT r FROM Reservation r WHERE r.user.id = ?1")
 	public Iterable<Reservation> findReservationsByUserId(int id);

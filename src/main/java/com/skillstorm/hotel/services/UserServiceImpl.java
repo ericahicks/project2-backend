@@ -35,7 +35,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public User findById(int id) {
 		Optional<User> user = repository.findById(id);
-		return user.isEmpty() ? null : user.get() ;
+		return user.isPresent() ? user.get() : null;
 	}
 
 	@Override

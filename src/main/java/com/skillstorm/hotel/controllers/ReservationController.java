@@ -29,7 +29,7 @@ import com.skillstorm.hotel.services.UserService;
 
 @RestController 
 @CrossOrigin("*")
-@RequestMapping("/reservation")
+@RequestMapping("/reservations")
 public class ReservationController {
 	
 	private static final Logger log = LoggerFactory.getLogger(ReservationController.class);

@@ -28,7 +28,7 @@ import com.skillstorm.hotel.services.ReservationService;
 import com.skillstorm.hotel.services.UserService;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/users")
 public class UserController {
 	
 	private static final Logger log = LoggerFactory.getLogger(UserController.class);

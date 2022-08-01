@@ -37,7 +37,7 @@ public class ReservationServiceImpl implements ReservationService {
 	@Override
 	public Reservation findById(int id) {
 		Optional<Reservation> rev = repository.findById(id);
-		return rev.isEmpty() ? null : rev.get();
+		return rev.isPresent() ? rev.get() : null;
 	}
 
 	@Override
