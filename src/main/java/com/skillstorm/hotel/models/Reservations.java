@@ -8,6 +8,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 
@@ -23,9 +25,10 @@ public class Reservations {
 	@Column(name = "roomnumber")
 	private int roomnumber;
 	
+	@ManyToOne
+	@JoinColumn(name="userid")
+	private hotelUsers users;
 	
-	@Column(name = "userid")
-	private int	userId;
 	
 	@Column(name = "checkin")
 	private Date checkin;
@@ -34,51 +37,56 @@ public class Reservations {
 	private Date checkout;
 	
 	
+
 	public Reservations() {
-		//super();
+		super();
 	}
+
 
 
 	public Reservations(int reservationId) {
-		//super();
+		super();
 		this.reservationId = reservationId;
 	}
+
 
 
 	public Reservations(int reservationId, int roomnumber) {
-		//super();
+		super();
 		this.reservationId = reservationId;
 		this.roomnumber = roomnumber;
 	}
 
 
-	public Reservations(int reservationId, int roomnumber, int userId) {
-		//super();
+
+	public Reservations(int reservationId, int roomnumber, hotelUsers users) {
+		super();
 		this.reservationId = reservationId;
 		this.roomnumber = roomnumber;
-		this.userId = userId;
+		this.users = users;
 	}
-	
-	
 
 
-	public Reservations(int reservationId, int roomnumber, int userId, Date checkin) {
-		//super();
+
+	public Reservations(int reservationId, int roomnumber, hotelUsers users, Date checkin) {
+		super();
 		this.reservationId = reservationId;
 		this.roomnumber = roomnumber;
-		this.userId = userId;
+		this.users = users;
 		this.checkin = checkin;
 	}
 
 
-	public Reservations(int reservationId, int roomnumber, int userId, Date checkin, Date checkout) {
-		//super();
+
+	public Reservations(int reservationId, int roomnumber, hotelUsers users, Date checkin, Date checkout) {
+		super();
 		this.reservationId = reservationId;
 		this.roomnumber = roomnumber;
-		this.userId = userId;
+		this.users = users;
 		this.checkin = checkin;
 		this.checkout = checkout;
 	}
+
 
 
 	public int getReservationId() {
@@ -86,9 +94,11 @@ public class Reservations {
 	}
 
 
+
 	public void setReservationId(int reservationId) {
 		this.reservationId = reservationId;
 	}
+
 
 
 	public int getRoomnumber() {
@@ -96,19 +106,23 @@ public class Reservations {
 	}
 
 
+
 	public void setRoomnumber(int roomnumber) {
 		this.roomnumber = roomnumber;
 	}
 
 
-	public int getUserId() {
-		return userId;
+
+	public hotelUsers getUsers() {
+		return users;
 	}
 
 
-	public void setUserId(int userId) {
-		this.userId = userId;
+
+	public void setUsers(hotelUsers users) {
+		this.users = users;
 	}
+
 
 
 	public Date getCheckin() {
@@ -116,9 +130,11 @@ public class Reservations {
 	}
 
 
+
 	public void setCheckin(Date checkin) {
 		this.checkin = checkin;
 	}
+
 
 
 	public Date getCheckout() {
@@ -126,16 +142,22 @@ public class Reservations {
 	}
 
 
+
 	public void setCheckout(Date checkout) {
 		this.checkout = checkout;
 	}
 
 
-	@Override
-	public String toString() {
-		return "Reservations [reservationId=" + reservationId + ", roomnumber=" + roomnumber + ", userId=" + userId
-				+ ", checkin=" + checkin + ", checkout=" + checkout + "]";
-	}
+
+//	@Override
+//	public String toString() {
+//		return "Reservations [reservationId=" + reservationId + ", roomnumber=" + roomnumber + ", users=" + users
+//				+ ", checkin=" + checkin + ", checkout=" + checkout + "]";
+//	}
+	
+	
+	
+	
 	
 	
 	

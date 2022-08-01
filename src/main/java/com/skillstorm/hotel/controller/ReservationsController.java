@@ -2,27 +2,43 @@ package com.skillstorm.hotel.controller;
 
 import java.util.List;
 
+import javax.validation.Valid;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.skillstorm.hotel.models.Reservations;
+import com.skillstorm.hotel.models.hotelUsers;
 import com.skillstorm.hotel.service.ReservationsService;
+import com.skillstorm.hotel.service.UsersService;
 
 @RestController
 @RequestMapping(path = "/Reservations")
 public class ReservationsController {
+	private static final Logger log = LoggerFactory.getLogger(ReservationsController.class);
 	
 	@Autowired
 	private final ReservationsService reservationsService;
+	@Autowired
+	private final UsersService usersService;
 	
-	public ReservationsController(ReservationsService reservationsService) {
-		//super();
+
+
+	public ReservationsController(ReservationsService reservationsService, UsersService usersService) {
+		super();
 		this.reservationsService = reservationsService;
+		this.usersService = usersService;
 	}
+
 
 	//Get All Hotel Reservations
 	@GetMapping
@@ -37,29 +53,24 @@ public class ReservationsController {
 	
         // update
 	@PutMapping("/{id}")
-	public Reservation update(@Valid @RequestBody Reservation reservation, @PathVariable int id) {
-		log.debug("Updating reservation with id=" + id + ", reservation=" + reservation);
-		reservation.setId(id);
+	public Reservations update(@Valid @RequestBody Reservations reservations, @PathVariable int id) {
+		log.debug("Updating reservation with id=" + id + ", reservation=" + reservations);
+		reservations.setUsers(id);
 		// Handle the inner user object before trying to save the reservation
 		// Foreign Key constraint says the user must be valid
-		User user = reservation.getUser();
-		if (user == null) {
-			reservation.setUser(DEFAULT_USER);
-		} else if (user.getId() == 0) { // no id, so create new user
-			user = userService.save(user);
+		hotelUsers user = reservations.getUsers();
+		 if (user.getId() == 0) { // no id, so create new user
+			user = usersService.addNewUser(user);
 		} else { // has id, so assume the user exists in the db
-			User oldUser = userService.findById(user.getId());
-			// What if some of the fields don't match? Assume they do?
-			user = oldUser;
+			usersService.updateUser(user);
 		}
-		return service.save(reservation);
+		return reservationsService.addNewReservations(reservations);
 	}
 	
 	// delete by id
 	@DeleteMapping("/{id}")
 	public void delete(@PathVariable int id) {
 		log.debug("Deleting reservation with id=" + id);
-		service.deleteById(id);
-	}
+		reservationsService.deleteReservation(id);	}
 
 }

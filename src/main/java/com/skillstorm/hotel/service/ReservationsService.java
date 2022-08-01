@@ -24,14 +24,17 @@ public class ReservationsService {
 		return reservationsRepository.findAll();
 	}
 	
-	public void addNewReservations(Reservations reservations) {
+	public Reservations addNewReservations(Reservations reservations) {
 		Optional<Reservations> reservationOptional = reservationsRepository.findReservationByreservationId(reservations.getReservationId());
 		if(reservationOptional.isPresent()) {
 			throw new IllegalStateException("This Reservation ID is already in use.");
 		}
-		reservationsRepository.save(reservations);
+		return reservationsRepository.save(reservations);
 	}
-	
+	 
+	public void deleteReservation(int id) {
+		reservationsRepository.deleteById(id);
+	}
 	
 
 }

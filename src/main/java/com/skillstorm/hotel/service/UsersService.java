@@ -32,14 +32,24 @@ public class UsersService {
 	}
 
 
-	public void addNewUser(hotelUsers hotelUser) {
+	public hotelUsers addNewUser(hotelUsers hotelUser) {
 		Optional<hotelUsers> userOptional =  usersRepository.findUserByEmail(hotelUser.getEmail());
 		if(userOptional.isPresent()) {
 			throw new IllegalComponentStateException("This Email Has Already Been Taken");
 		}
-		usersRepository.save(hotelUser);
+		return usersRepository.save(hotelUser);
 		
 	}
+	
+	public hotelUsers updateUser(hotelUsers hotelUser) {
+		Optional<hotelUsers> userOptional =  usersRepository.findUserByEmail(hotelUser.getEmail());
+		if(userOptional.isPresent()) {
+			throw new IllegalComponentStateException("This Email Has Already Been Taken");
+		}
+		return usersRepository.save(hotelUser);
+		
+	}
+
 
 
 	public void deleteUser(int userid) {
@@ -50,6 +60,9 @@ public class UsersService {
 		usersRepository.deleteById(userid);
 		
 	}
+
+
+	
 
 	
 }
