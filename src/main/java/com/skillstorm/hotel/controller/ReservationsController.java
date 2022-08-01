@@ -34,5 +34,32 @@ public class ReservationsController {
 	public void createNewReservation(@RequestBody Reservations reservations) {
 		reservationsService.addNewReservations(reservations);
 	}
+	
+        // update
+	@PutMapping("/{id}")
+	public Reservation update(@Valid @RequestBody Reservation reservation, @PathVariable int id) {
+		log.debug("Updating reservation with id=" + id + ", reservation=" + reservation);
+		reservation.setId(id);
+		// Handle the inner user object before trying to save the reservation
+		// Foreign Key constraint says the user must be valid
+		User user = reservation.getUser();
+		if (user == null) {
+			reservation.setUser(DEFAULT_USER);
+		} else if (user.getId() == 0) { // no id, so create new user
+			user = userService.save(user);
+		} else { // has id, so assume the user exists in the db
+			User oldUser = userService.findById(user.getId());
+			// What if some of the fields don't match? Assume they do?
+			user = oldUser;
+		}
+		return service.save(reservation);
+	}
+	
+	// delete by id
+	@DeleteMapping("/{id}")
+	public void delete(@PathVariable int id) {
+		log.debug("Deleting reservation with id=" + id);
+		service.deleteById(id);
+	}
 
 }
