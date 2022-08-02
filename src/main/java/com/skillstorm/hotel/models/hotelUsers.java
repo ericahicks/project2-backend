@@ -40,7 +40,7 @@ public class HotelUsers {
 	
 	@Column(name="phonenumber")
 	@NotBlank
-	private String number;
+	private String phonenumber;
 	
 	@Column(name="email")
 	@NotBlank
@@ -66,7 +66,7 @@ public class HotelUsers {
 		this.id = id;
 		this.firstName = firstName;
 		this.lastName = lastName;
-		this.number = number;
+		this.phonenumber = number;
 		this.email = email;
 	}
 	
@@ -75,7 +75,7 @@ public class HotelUsers {
 		super();
 		this.firstName = firstName;
 		this.lastName = lastName;
-		this.number = number;
+		this.phonenumber = number;
 		this.email = email;
 	}
 	
@@ -84,7 +84,7 @@ public class HotelUsers {
 		super();
 		this.firstName = firstName;
 		this.lastName = lastName;
-		this.number = number;
+		this.phonenumber = number;
 		this.email = email;
 		this.reservations = reservations;
 	}
@@ -95,7 +95,7 @@ public class HotelUsers {
 		this.id = id;
 		this.firstName = firstName;
 		this.lastName = lastName;
-		this.number = number;
+		this.phonenumber = number;
 		this.email = email;
 		this.reservations = reservations;
 	}
@@ -137,13 +137,13 @@ public class HotelUsers {
 	}
 
 
-	public String getNumber() {
-		return number;
+	public String getPhonenumber() {
+		return phonenumber;
 	}
 
 
-	public void setNumber(String number) {
-		this.number = number;
+	public void setPhonenumber(String number) {
+		this.phonenumber = number;
 	}
 
 
@@ -163,7 +163,7 @@ public class HotelUsers {
 
 	@Override
 	public String toString() {
-		return "HotelUsers [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", number=" + number
+		return "HotelUsers [id=" + id + ", firstName=" + firstName + ", lastName=" + lastName + ", phonenumber=" + phonenumber
 				+ ", email=" + email + "]";
 	}
 

@@ -21,17 +21,15 @@ public class ReservationsService {
 	////////////////////// Instance Variables ///////////////////////
 	/////////////////////////////////////////////////////////////////
 	
-	@Autowired
 	private final ReservationsRepository reservationsRepository;
 	
-	@Autowired
 	private final UsersRepository usersRepository;
 	
 
 	/////////////////////////////////////////////////////////////////
 	///////////////////////// Constructor ///////////////////////////
 	/////////////////////////////////////////////////////////////////
-
+	@Autowired
 	public ReservationsService(ReservationsRepository reservationsRepository, 
 			UsersRepository usersRepository) {
 		//super();
@@ -65,9 +63,12 @@ public class ReservationsService {
 			users = usersRepository.save(users); // save or update
 			reservations.getUsers().setId(users.getId()); // set id in case changed
 		}
-//		if (!reservationsRepository.isRoomAvailableByDates(reservations.getRoomnumber(), null, null)) {
-//			throw new IllegalStateException("Room " + reservations.getRoomnumber() + " is not availble the requested dates.");
-//		}
+		if (reservationsRepository
+				.numberOfOverlappingReservationsByRoom(reservations.getRoomnumber(), 
+						                               reservations.getCheckin(), 
+						                               reservations.getCheckout() ) > 0) {
+			throw new IllegalStateException("Room " + reservations.getRoomnumber() + " is not availble the requested dates.");
+		}
 		return reservationsRepository.save(reservations);
 	}
 	
@@ -84,7 +85,9 @@ public class ReservationsService {
 	}
 	 
 	public void deleteReservation(int id) {
-		reservationsRepository.deleteById(id);
+		if (reservationsRepository.existsById(id)) {
+			reservationsRepository.deleteById(id);
+		} // else your work is done!
 	}
 	
 
