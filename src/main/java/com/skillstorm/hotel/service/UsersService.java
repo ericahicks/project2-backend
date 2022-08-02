@@ -6,19 +6,30 @@ import java.awt.IllegalComponentStateException;
 import java.util.List;
 import java.util.Optional;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.skillstorm.hotel.models.hotelUsers;
+import com.skillstorm.hotel.models.HotelUsers;
 import com.skillstorm.hotel.repository.UsersRepository;
 
 
 
 @Service
 public class UsersService {
+
+	/////////////////////////////////////////////////////////////////
+	//////////////////////// Instance Variables /////////////////////
+	/////////////////////////////////////////////////////////////////
 	
 	@Autowired
 	private final UsersRepository usersRepository;
+	
+
+	/////////////////////////////////////////////////////////////////
+	//////////////////////// Constructors ///////////////////////////
+	/////////////////////////////////////////////////////////////////
 	
 	
 	public UsersService(UsersRepository usersRepository) {
@@ -27,42 +38,52 @@ public class UsersService {
 	}
 
 
-	public List<hotelUsers> getUsers() {
+	/////////////////////////////////////////////////////////////////
+	/////////////////////////// Methods /////////////////////////////
+	/////////////////////////////////////////////////////////////////
+	
+
+	public List<HotelUsers> getUsers() {
 		return usersRepository.findAll();
 	}
-
-
-	public hotelUsers addNewUser(hotelUsers hotelUser) {
-		Optional<hotelUsers> userOptional =  usersRepository.findUserByEmail(hotelUser.getEmail());
+	
+	public HotelUsers getUsersById(int id) {
+		Optional<HotelUsers> users = usersRepository.findById(id);
+		return users.isPresent() ? users.get() : null;
+	}
+	
+	@Transactional
+	public HotelUsers addNewUser(HotelUsers hotelUser) {
+		Optional<HotelUsers> userOptional =  usersRepository.findUserByEmail(hotelUser.getEmail());
 		if(userOptional.isPresent()) {
-			throw new IllegalComponentStateException("This Email Has Already Been Taken");
+			throw new IllegalComponentStateException("This Email Has Already Been Taken"); // Runtime Exception will cause Rollback!
 		}
 		return usersRepository.save(hotelUser);
 		
 	}
 	
-	public hotelUsers updateUser(hotelUsers hotelUser) {
-		Optional<hotelUsers> userOptional =  usersRepository.findUserByEmail(hotelUser.getEmail());
-		if(userOptional.isPresent()) {
+	@Transactional
+	public HotelUsers updateUser(HotelUsers hotelUser) {
+		Optional<HotelUsers> userOptional =  usersRepository.findUserByEmail(hotelUser.getEmail());
+		System.out.println("==================================================================");
+		System.out.println("updateUser: user.id=" + userOptional.get().getId() + " hotelUser.id=" + hotelUser.getId());
+		if(userOptional.isPresent() && userOptional.get().getId() != hotelUser.getId()) {
 			throw new IllegalComponentStateException("This Email Has Already Been Taken");
 		}
 		return usersRepository.save(hotelUser);
 		
 	}
 
-
-
 	public void deleteUser(int userid) {
-		boolean exists = usersRepository.existsById(userid);
-		if(!exists) {
-			throw new IllegalStateException("User with this id " + userid + " does not exist!");
-		}
+		// Don't bother checking if it exists, since they want the user gone, if it's gone already that's "success"
+//		boolean exists = usersRepository.existsById(userid);
+//		if(!exists) {
+//			throw new IllegalStateException("User with this id " + userid + " does not exist!");
+//		}
 		usersRepository.deleteById(userid);
 		
 	}
 
-
-	
 
 	
 }

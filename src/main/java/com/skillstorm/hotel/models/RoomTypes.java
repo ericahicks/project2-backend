@@ -1,5 +1,7 @@
 package com.skillstorm.hotel.models;
 
+import java.math.BigInteger;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -22,9 +24,7 @@ public class RoomTypes {
 	private String name;
 	
 	@Column(name="price")
-	private int price;
-	
-	
+	private BigInteger price;
 
 	public RoomTypes() {
 		//super();
@@ -47,7 +47,7 @@ public class RoomTypes {
 
 
 
-	public RoomTypes(int roomtypeid, String name, int price) {
+	public RoomTypes(int roomtypeid, String name, BigInteger price) {
 		//super();
 		this.roomtypeid = roomtypeid;
 		this.name = name;
@@ -80,13 +80,13 @@ public class RoomTypes {
 
 
 
-	public int getPrice() {
+	public BigInteger getPrice() {
 		return price;
 	}
 
 
 
-	public void setPrice(int price) {
+	public void setPrice(BigInteger price) {
 		this.price = price;
 	}
 

@@ -7,6 +7,7 @@ import javax.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,63 +15,67 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.skillstorm.hotel.models.Reservations;
-import com.skillstorm.hotel.models.hotelUsers;
 import com.skillstorm.hotel.service.ReservationsService;
 import com.skillstorm.hotel.service.UsersService;
 
 @RestController
-@RequestMapping(path = "/Reservations")
+@RequestMapping(path = "/reservations")
 public class ReservationsController {
+
+	/////////////////////////////////////////////////////////////////
+	///////////////// Class and Instance Variables  /////////////////
+	/////////////////////////////////////////////////////////////////
 	private static final Logger log = LoggerFactory.getLogger(ReservationsController.class);
 	
 	@Autowired
 	private final ReservationsService reservationsService;
-	@Autowired
-	private final UsersService usersService;
-	
 
+	/////////////////////////////////////////////////////////////////
+	/////////////////////////// Constructor /////////////////////////
+	/////////////////////////////////////////////////////////////////
 
-	public ReservationsController(ReservationsService reservationsService, UsersService usersService) {
+	public ReservationsController(ReservationsService reservationsService) {
 		super();
 		this.reservationsService = reservationsService;
-		this.usersService = usersService;
 	}
 
+	/////////////////////////////////////////////////////////////////
+	///////////////////////////// Methods ///////////////////////////
+	/////////////////////////////////////////////////////////////////
 
 	//Get All Hotel Reservations
 	@GetMapping
 	public List<Reservations> getReservations(){
 		return reservationsService.getReservations();
 	}
+	
+	@GetMapping("/{id}")
+	public Reservations getReservationsById(@PathVariable int id) {
+		return reservationsService.getReservationsById(id);
+	}
+	
 	//This Method Adds a new Reservations To the DB
 	@PostMapping
-	public void createNewReservation(@RequestBody Reservations reservations) {
-		reservationsService.addNewReservations(reservations);
+	@ResponseStatus(HttpStatus.CREATED)
+	public Reservations createNewReservation(@Valid @RequestBody Reservations reservations) {
+		return reservationsService.addNewReservations(reservations);
 	}
 	
         // update
 	@PutMapping("/{id}")
 	public Reservations update(@Valid @RequestBody Reservations reservations, @PathVariable int id) {
 		log.debug("Updating reservation with id=" + id + ", reservation=" + reservations);
-		reservations.setUsers(id);
-		// Handle the inner user object before trying to save the reservation
-		// Foreign Key constraint says the user must be valid
-		hotelUsers user = reservations.getUsers();
-		 if (user.getId() == 0) { // no id, so create new user
-			user = usersService.addNewUser(user);
-		} else { // has id, so assume the user exists in the db
-			usersService.updateUser(user);
-		}
+		// business logic in service class to check if user in the reservation is new or old
 		return reservationsService.addNewReservations(reservations);
 	}
 	
-	// delete by id
 	@DeleteMapping("/{id}")
 	public void delete(@PathVariable int id) {
-		log.debug("Deleting reservation with id=" + id);
-		reservationsService.deleteReservation(id);	}
+		reservationsService.deleteReservation(id);
+	}
 
 }
