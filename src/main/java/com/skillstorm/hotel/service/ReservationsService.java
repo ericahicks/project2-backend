@@ -1,10 +1,12 @@
 package com.skillstorm.hotel.service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -43,8 +45,8 @@ public class ReservationsService {
 	//////////////////////////// Methods ////////////////////////////
 	/////////////////////////////////////////////////////////////////
 	
-	public List<Reservations> getReservations(){
-		return reservationsRepository.findAll();
+	public List<Reservations> getReservations(int page, int limit){
+		return reservationsRepository.findAll(PageRequest.of(page, limit)).toList();
 	}
 	
 	public Reservations getReservationsById(int id) {
@@ -61,6 +63,16 @@ public class ReservationsService {
 		return info;
 	}
 	
+	public List<ReservationInfoDto> getReservationInfoByEmail(String email) {
+		List<ReservationInfoDto> info = new ArrayList<>();
+		List<Reservations> reservations = reservationsRepository.findByEmail(email);
+		for (Reservations reservation : reservations) {
+			info.add(new ReservationInfoDto(reservation));
+		}
+		return info;
+	}
+	
+	
 	@Transactional
 	public Reservations addNewReservations(Reservations reservations) {
 		Optional<Reservations> reservationOptional = reservationsRepository.findReservationByreservationId(reservations.getReservationId());
@@ -74,9 +86,9 @@ public class ReservationsService {
 			reservations.getUsers().setId(users.getId()); // set id in case changed
 		}
 		if (reservationsRepository
-				.numberOfOverlappingReservationsByRoom(reservations.getRoomnumber(), 
+				.existsOverlappingReservationsByRoom(reservations.getRoomnumber(), 
 						                               reservations.getCheckin(), 
-						                               reservations.getCheckout() ) > 0) {
+						                               reservations.getCheckout() )) {
 			throw new IllegalStateException("Room " + reservations.getRoomnumber() + " is not availble the requested dates.");
 		}
 		return reservationsRepository.save(reservations);

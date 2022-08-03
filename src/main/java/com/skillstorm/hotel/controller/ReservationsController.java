@@ -9,6 +9,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -56,17 +58,33 @@ public class ReservationsController {
 	public List<ReservationInfoDto> getReservations(@RequestParam(defaultValue = "1") int page, 
 	@RequestParam(defaultValue = "3") int limit) {
 		List<ReservationInfoDto> info = new ArrayList<>();
-		List<Reservations> reservations = reservationsService.getReservations();
+		List<Reservations> reservations = reservationsService.getReservations(page, limit);
 		for (Reservations reservation : reservations) {
 			info.add(new ReservationInfoDto(reservation));
 		}
 		return info;
 	}
 	
-	@GetMapping("/{id}")
-	public Reservations getReservationsById(@PathVariable int id) {
-		return reservationsService.getReservationsById(id);
+	@PostMapping("/user")
+	public ResponseEntity<List<ReservationInfoDto>> getUsersReservations(@RequestBody String body) {
+		System.out.println("Request Body was: " + body);
+		List<ReservationInfoDto> reservations = reservationsService.getReservationInfoByEmail(body);
+		return new ResponseEntity<>(reservations, reservations.size() > 0 ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
 	}
+	
+	@GetMapping("/{id}")
+	public ResponseEntity<ReservationInfoDto> getReservationsById(@PathVariable int id) {
+		ReservationInfoDto reservation = reservationsService.getReservationInfoById(id);
+		if (reservation == null) {
+			return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+		}
+		return new ResponseEntity<>(reservation, HttpStatus.OK);
+	}
+	
+//	@GetMapping("/{id}")
+//	public Reservations getReservationsById(@PathVariable int id) {
+//		return reservationsService.getReservationsById(id);
+//	}
 	
 	//This Method Adds a new Reservations To the DB
 	@PostMapping
