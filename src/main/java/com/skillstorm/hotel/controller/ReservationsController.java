@@ -1,5 +1,6 @@
 package com.skillstorm.hotel.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.validation.Valid;
@@ -16,9 +17,11 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.skillstorm.hotel.dtos.ReservationInfoDto;
 import com.skillstorm.hotel.models.Reservations;
 import com.skillstorm.hotel.service.ReservationsService;
 
@@ -50,8 +53,14 @@ public class ReservationsController {
 
 	//Get All Hotel Reservations
 	@GetMapping
-	public List<Reservations> getReservations(){
-		return reservationsService.getReservations();
+	public List<ReservationInfoDto> getReservations(@RequestParam(defaultValue = "1") int page, 
+	@RequestParam(defaultValue = "3") int limit) {
+		List<ReservationInfoDto> info = new ArrayList<>();
+		List<Reservations> reservations = reservationsService.getReservations();
+		for (Reservations reservation : reservations) {
+			info.add(new ReservationInfoDto(reservation));
+		}
+		return info;
 	}
 	
 	@GetMapping("/{id}")

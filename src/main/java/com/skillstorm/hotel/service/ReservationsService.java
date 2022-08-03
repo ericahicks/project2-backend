@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.skillstorm.hotel.dtos.ReservationInfoDto;
 import com.skillstorm.hotel.models.HotelUsers;
 import com.skillstorm.hotel.models.Reservations;
 import com.skillstorm.hotel.repository.ReservationsRepository;
@@ -49,6 +50,15 @@ public class ReservationsService {
 	public Reservations getReservationsById(int id) {
 		Optional<Reservations> reservations = reservationsRepository.findById(id);
 		return reservations.isPresent() ? reservations.get() : null;
+	}
+	
+	public ReservationInfoDto getReservationInfoById(int id) {
+		ReservationInfoDto info = new ReservationInfoDto();
+		Reservations reservation = getReservationsById(id);
+		if (reservation != null) {
+			info.setAll(reservation);
+		}
+		return info;
 	}
 	
 	@Transactional
