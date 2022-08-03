@@ -9,6 +9,7 @@ import java.util.Optional;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.skillstorm.hotel.models.HotelUsers;
@@ -43,8 +44,8 @@ public class UsersService {
 	/////////////////////////////////////////////////////////////////
 	
 
-	public List<HotelUsers> getUsers() {
-		return usersRepository.findAll();
+	public List<HotelUsers> getUsers(int page, int limit) {
+		return usersRepository.findAll(PageRequest.of(page, limit)).toList();
 	}
 	
 	public HotelUsers getUsersById(int id) {

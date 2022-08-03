@@ -1,7 +1,7 @@
 package com.skillstorm.hotel.repository;
 
 import java.sql.Date;
-
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -14,10 +14,16 @@ public interface ReservationsRepository extends JpaRepository<Reservations, Inte
 
 	Optional<Reservations> findReservationByreservationId(int reservationId);
 	
+	@Query(value="SELECT * FROM reservation INNER JOIN user USING (userid) "
+			+ "WHERE User.email = ?1", nativeQuery = true)
+	List<Reservations> findByEmail(String email);
+	
 	@Query("SELECT "
-			+ "COUNT(*) "
+			+ "COUNT(*) > 0 "
 			+ "FROM Reservations r "
 			+ "WHERE r.roomnumber = ?1 "
 			+ "AND ((r.checkin <= ?2 AND r.checkout > ?2) OR (r.checkin >= ?2 AND r.checkin < ?3))")
-	int numberOfOverlappingReservationsByRoom(int roomnumber, Date checkin, Date checkout);
+	boolean existsOverlappingReservationsByRoom(int roomnumber, Date checkin, Date checkout);
+	
+	
 }

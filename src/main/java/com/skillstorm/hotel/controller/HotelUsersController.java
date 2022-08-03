@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -49,8 +50,9 @@ public class HotelUsersController {
 
 	// This method gets all the Users from the Db
 	@GetMapping
-	public List<HotelUsers> getUsers() {
-		return usersService.getUsers();
+	public List<HotelUsers> getUsers(@RequestParam(defaultValue = "1") int page, 
+			@RequestParam(defaultValue = "3") int limit) {
+		return usersService.getUsers(--page, limit);
 	}
 	
 	@GetMapping("/{id}")
