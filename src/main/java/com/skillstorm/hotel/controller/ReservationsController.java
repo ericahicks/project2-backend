@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.skillstorm.hotel.dtos.DtoUtils;
 import com.skillstorm.hotel.dtos.ReservationInfoDto;
 import com.skillstorm.hotel.models.Reservations;
 import com.skillstorm.hotel.service.ReservationsService;
@@ -60,7 +61,7 @@ public class ReservationsController {
 		List<ReservationInfoDto> info = new ArrayList<>();
 		List<Reservations> reservations = reservationsService.getReservations(page, limit);
 		for (Reservations reservation : reservations) {
-			info.add(new ReservationInfoDto(reservation));
+			info.add(DtoUtils.create(reservation));
 		}
 		return info;
 	}
@@ -86,20 +87,32 @@ public class ReservationsController {
 //		return reservationsService.getReservationsById(id);
 //	}
 	
+	@PostMapping // TODO add @Valid
+	public ResponseEntity<ReservationInfoDto> createNewReservation(@RequestBody ReservationInfoDto info) {
+		info = reservationsService.addNewReservations(info); // save response (should have updated reservationid and maybe userid)
+		return new ResponseEntity<ReservationInfoDto>(info, info == null ? HttpStatus.INTERNAL_SERVER_ERROR : HttpStatus.CREATED);
+	}
+	
 	//This Method Adds a new Reservations To the DB
-	@PostMapping
-	@ResponseStatus(HttpStatus.CREATED)
-	public Reservations createNewReservation(@Valid @RequestBody Reservations reservations) {
-		return reservationsService.addNewReservations(reservations);
+//	@PostMapping
+//	@ResponseStatus(HttpStatus.CREATED)
+//	public Reservations createNewReservation(@Valid @RequestBody Reservations reservations) {
+//		return reservationsService.addNewReservations(reservations);
+//	}
+	
+	@PutMapping // TODO add @Valid
+	public ResponseEntity<ReservationInfoDto> updateReservation(@RequestBody ReservationInfoDto info) {
+		info = reservationsService.updateReservations(info); // save response (should have updated reservationid and maybe userid)
+		return new ResponseEntity<ReservationInfoDto>(info, info == null ? HttpStatus.INTERNAL_SERVER_ERROR : HttpStatus.CREATED);
 	}
 	
         // update
-	@PutMapping("/{id}")
-	public Reservations update(@Valid @RequestBody Reservations reservations, @PathVariable int id) {
-		log.debug("Updating reservation with id=" + id + ", reservation=" + reservations);
-		// business logic in service class to check if user in the reservation is new or old
-		return reservationsService.addNewReservations(reservations);
-	}
+//	@PutMapping("/{id}")
+//	public Reservations update(@Valid @RequestBody Reservations reservations, @PathVariable int id) {
+//		log.debug("Updating reservation with id=" + id + ", reservation=" + reservations);
+//		// business logic in service class to check if user in the reservation is new or old
+//		return reservationsService.addNewReservations(reservations);
+//	}
 	
 	@DeleteMapping("/{id}")
 	public void delete(@PathVariable int id) {

@@ -1,5 +1,6 @@
 package com.skillstorm.hotel.service;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -10,6 +11,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.skillstorm.hotel.dtos.DtoUtils;
 import com.skillstorm.hotel.dtos.ReservationInfoDto;
 import com.skillstorm.hotel.models.HotelUsers;
 import com.skillstorm.hotel.models.Reservations;
@@ -55,19 +57,18 @@ public class ReservationsService {
 	}
 	
 	public ReservationInfoDto getReservationInfoById(int id) {
-		ReservationInfoDto info = new ReservationInfoDto();
 		Reservations reservation = getReservationsById(id);
 		if (reservation != null) {
-			info.setAll(reservation);
+			return DtoUtils.create(reservation);
 		}
-		return info;
+		return null;
 	}
 	
 	public List<ReservationInfoDto> getReservationInfoByEmail(String email) {
 		List<ReservationInfoDto> info = new ArrayList<>();
 		List<Reservations> reservations = reservationsRepository.findByEmail(email);
 		for (Reservations reservation : reservations) {
-			info.add(new ReservationInfoDto(reservation));
+			info.add(DtoUtils.create(reservation));
 		}
 		return info;
 	}
@@ -92,6 +93,43 @@ public class ReservationsService {
 			throw new IllegalStateException("Room " + reservations.getRoomnumber() + " is not availble the requested dates.");
 		}
 		return reservationsRepository.save(reservations);
+	}
+	
+	@Transactional
+	public ReservationInfoDto addNewReservations(ReservationInfoDto reservationInfo) {
+		// extract data from info and create a reservation and its inner user
+		Reservations reservation = DtoUtils.getReservation(reservationInfo);
+		// save the reservation and its inner user to the db
+		reservation = addNewReservations(reservation);
+		// extract the data from the reservation and inner user to create data transfer object
+		return DtoUtils.create(reservation);
+	}
+	
+	@Transactional
+	public ReservationInfoDto updateReservations(ReservationInfoDto reservationInfo) {
+		
+		// Step 1: Convert Dto to reservation object
+		Reservations reservations = DtoUtils.getReservation(reservationInfo);
+		
+		// Step 2: Check if user exists and create if necessary
+		HotelUsers users = reservations.getUsers();
+		if (usersRepository.existsById(users.getId())) {
+			users = usersRepository.save(users); // save or update
+			reservations.getUsers().setId(users.getId()); // set id in case changed
+		}
+		
+		// Step 3: Check if valid repository room/dates
+		if (reservationsRepository
+				.existsOverlappingReservationsByRoom(reservations.getRoomnumber(), 
+						                               reservations.getCheckin(), 
+						                               reservations.getCheckout() )) {
+			throw new IllegalStateException("Room " + reservations.getRoomnumber() + " is not availble the requested dates.");
+		}
+		System.out.println("=========================");
+		System.out.println("Saving reservation: " + reservations);
+		System.out.println("    where user: " + reservations.getUsers());
+		System.out.println("=========================");
+		return DtoUtils.create(reservationsRepository.save(reservations));
 	}
 	
 	@Transactional

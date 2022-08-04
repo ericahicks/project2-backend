@@ -2,10 +2,13 @@ package com.skillstorm.hotel.dtos;
 
 import java.sql.Date;
 
-import com.skillstorm.hotel.models.HotelUsers;
-import com.skillstorm.hotel.models.Reservations;
 
 public class ReservationInfoDto {
+	
+
+	/////////////////////////////////////////////////////////////////
+	//////////////////////// Instance Variables /////////////////////
+	/////////////////////////////////////////////////////////////////
 	
 	private int reservationId;
 	
@@ -25,6 +28,12 @@ public class ReservationInfoDto {
 	
 	private String email;
 
+
+	/////////////////////////////////////////////////////////////////
+	//////////////////////// Constructors ///////////////////////////
+	/////////////////////////////////////////////////////////////////
+	
+	
 	public ReservationInfoDto() {
 		super();
 	}
@@ -42,36 +51,10 @@ public class ReservationInfoDto {
 		this.phonenumber = phonenumber;
 		this.email = email;
 	}
-	
-	public ReservationInfoDto(Reservations reservations) {
-		if (reservations.getUsers() != null) {
-			HotelUsers user = reservations.getUsers();
-			this.userid = reservations.getUsers().getId();
-			this.firstName = user.getFirstName();
-			this.lastName = user.getLastName();
-			this.phonenumber = user.getPhonenumber();
-			this.email = user.getEmail();
-		}
-		this.reservationId = reservations.getReservationId();
-		this.roomnumber = reservations.getRoomnumber();
-		this.checkin = reservations.getCheckin();
-		this.checkout = reservations.getCheckout();
-	}
-	
-	public void setAll(Reservations reservations) {
-		if (reservations.getUsers() != null) {
-			HotelUsers user = reservations.getUsers();
-			this.userid = reservations.getUsers().getId();
-			this.firstName = user.getFirstName();
-			this.lastName = user.getLastName();
-			this.phonenumber = user.getPhonenumber();
-			this.email = user.getEmail();
-		}
-		this.reservationId = reservations.getReservationId();
-		this.roomnumber = reservations.getRoomnumber();
-		this.checkin = reservations.getCheckin();
-		this.checkout = reservations.getCheckout();
-	}
+
+	/////////////////////////////////////////////////////////////////
+	////////////////////// Getters / Setters ////////////////////////
+	/////////////////////////////////////////////////////////////////
 
 	public int getReservationId() {
 		return reservationId;
