@@ -28,7 +28,7 @@ public class ReservationsService {
 	
 	private final ReservationsRepository reservationsRepository;
 	
-	private final UsersRepository usersRepository;
+	private final UsersService usersService;
 	
 
 	/////////////////////////////////////////////////////////////////
@@ -36,10 +36,10 @@ public class ReservationsService {
 	/////////////////////////////////////////////////////////////////
 	@Autowired
 	public ReservationsService(ReservationsRepository reservationsRepository, 
-			UsersRepository usersRepository) {
+			UsersService usersService) {
 		//super();
 		this.reservationsRepository = reservationsRepository;
-		this.usersRepository = usersRepository;
+		this.usersService = usersService;
 	}
 	
 
@@ -82,8 +82,11 @@ public class ReservationsService {
 		}
 		// Check if user exists and create if necessary
 		HotelUsers users = reservations.getUsers();
-		if (usersRepository.existsById(users.getId())) {
-			users = usersRepository.save(users); // save or update
+		if (usersService.existsById(users.getId())) {
+			users = usersService.updateUser(users); // update
+			reservations.getUsers().setId(users.getId()); // set id in case changed
+		} else {
+			users = usersService.addNewUser(users); // save new
 			reservations.getUsers().setId(users.getId()); // set id in case changed
 		}
 		if (reservationsRepository
@@ -110,13 +113,14 @@ public class ReservationsService {
 		
 		// Step 1: Convert Dto to reservation object
 		Reservations reservations = DtoUtils.getReservation(reservationInfo);
+		HotelUsers users = DtoUtils.getUser(reservationInfo);
 		
 		// Step 2: Check if user exists and create if necessary
-		HotelUsers users = reservations.getUsers();
-		if (usersRepository.existsById(users.getId())) {
-			users = usersRepository.save(users); // save or update
-			reservations.getUsers().setId(users.getId()); // set id in case changed
-		}
+//		HotelUsers users = reservations.getUsers();
+//		if (usersService.existsById(users.getId())) {
+			users = usersService.updateUser(users); // save or update ALWAYS
+			reservations.setUsers(users); // set id in case changed
+//		}
 		
 		// Step 3: Check if valid repository room/dates
 		if (reservationsRepository
@@ -136,7 +140,7 @@ public class ReservationsService {
 	public Reservations updateReservations(Reservations reservations) {
 		// update (or create if new) the user entity inside the reservation
 		// set the reservation's user to the returned object incase userid changed
-		reservations.setUsers(usersRepository.save(reservations.getUsers()));
+		reservations.setUsers(usersService.addNewUser(reservations.getUsers()));
 		// save the updates to the reservation object itself
 //		if (!reservationsRepository.isRoomAvailableByDates(reservations.getRoomnumber(), null, null)) {
 //			throw new IllegalStateException("Room " + reservations.getRoomnumber() + " is not availble the requested dates.");

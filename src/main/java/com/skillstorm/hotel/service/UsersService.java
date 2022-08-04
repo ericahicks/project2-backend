@@ -66,13 +66,17 @@ public class UsersService {
 	@Transactional
 	public HotelUsers updateUser(HotelUsers hotelUser) {
 		Optional<HotelUsers> userOptional =  usersRepository.findUserByEmail(hotelUser.getEmail());
-		System.out.println("==================================================================");
-		System.out.println("updateUser: user.id=" + userOptional.get().getId() + " hotelUser.id=" + hotelUser.getId());
+//		System.out.println("==================================================================");
+//		System.out.println("updateUser: user.id=" + userOptional.get().getId() + " hotelUser.id=" + hotelUser.getId());
 		if(userOptional.isPresent() && userOptional.get().getId() != hotelUser.getId()) {
 			throw new IllegalComponentStateException("This Email Has Already Been Taken");
 		}
 		return usersRepository.save(hotelUser);
 		
+	}
+	
+	public boolean existsById(int id) {
+		return usersRepository.existsById(id);
 	}
 
 	public void deleteUser(int userid) {

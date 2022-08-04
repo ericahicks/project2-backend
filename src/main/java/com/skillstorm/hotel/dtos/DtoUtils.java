@@ -32,4 +32,8 @@ public class DtoUtils {
 		// params (int roomnumber, HotelUsers users, Date checkin, Date checkout)
 		return new Reservations(info.getRoomnumber(), user, info.getCheckin(), info.getCheckin());
 	}
+	
+	public static HotelUsers getUser(ReservationInfoDto info) {
+		return new HotelUsers(info.getUserid(), info.getFirstName(), info.getLastName(), info.getPhonenumber(), info.getEmail());
+	}
 }
