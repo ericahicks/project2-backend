@@ -101,6 +101,7 @@ public class ReservationsController {
 //	}
 	
 	@PutMapping // TODO add @Valid
+	@CrossOrigin("*")
 	public ResponseEntity<ReservationInfoDto> updateReservation(@RequestBody ReservationInfoDto info) {
 		info = reservationsService.updateReservations(info); // save response (should have updated reservationid and maybe userid)
 		return new ResponseEntity<ReservationInfoDto>(info, info == null ? HttpStatus.INTERNAL_SERVER_ERROR : HttpStatus.CREATED);
