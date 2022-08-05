@@ -1,6 +1,5 @@
 package com.skillstorm.hotel.service;
 
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -16,7 +15,6 @@ import com.skillstorm.hotel.dtos.ReservationInfoDto;
 import com.skillstorm.hotel.models.HotelUsers;
 import com.skillstorm.hotel.models.Reservations;
 import com.skillstorm.hotel.repository.ReservationsRepository;
-import com.skillstorm.hotel.repository.UsersRepository;
 
 @Service
 public class ReservationsService {

@@ -1,6 +1,7 @@
 package com.skillstorm.hotel.repository;
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,7 +24,7 @@ public interface ReservationsRepository extends JpaRepository<Reservations, Inte
 			+ "FROM Reservations r "
 			+ "WHERE r.roomnumber = ?1 AND r.reservationId != ?4 "
 			+ "AND ((r.checkin <= ?2 AND r.checkout > ?2) OR (r.checkin >= ?2 AND r.checkin < ?3))")
-	boolean existsOverlappingReservationsByRoom(int roomnumber, Date checkin, Date checkout, int reservationId);
+	boolean existsOverlappingReservationsByRoom(int roomnumber, LocalDate checkin, LocalDate checkout, int reservationId);
 	
 	
 }

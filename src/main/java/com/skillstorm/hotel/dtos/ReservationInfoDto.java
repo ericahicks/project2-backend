@@ -1,6 +1,6 @@
 package com.skillstorm.hotel.dtos;
 
-import java.sql.Date;
+import java.time.LocalDate;
 
 
 public class ReservationInfoDto {
@@ -14,9 +14,9 @@ public class ReservationInfoDto {
 	
 	private int roomnumber;
 	
-	private Date checkin;
+	private LocalDate checkin;
 	
-	private Date checkout;
+	private LocalDate checkout;
 	
 	private int userid;
 	
@@ -38,7 +38,7 @@ public class ReservationInfoDto {
 		super();
 	}
 
-	public ReservationInfoDto(int reservationId, int roomnumber, Date checkin, Date checkout, int userid,
+	public ReservationInfoDto(int reservationId, int roomnumber, LocalDate checkin, LocalDate checkout, int userid,
 			String firstName, String lastName, String phonenumber, String email) {
 		super();
 		this.reservationId = reservationId;
@@ -72,19 +72,19 @@ public class ReservationInfoDto {
 		this.roomnumber = roomnumber;
 	}
 
-	public Date getCheckin() {
+	public LocalDate getCheckin() {
 		return checkin;
 	}
 
-	public void setCheckin(Date checkin) {
+	public void setCheckin(LocalDate checkin) {
 		this.checkin = checkin;
 	}
 
-	public Date getCheckout() {
+	public LocalDate getCheckout() {
 		return checkout;
 	}
 
-	public void setCheckout(Date checkout) {
+	public void setCheckout(LocalDate checkout) {
 		this.checkout = checkout;
 	}
 

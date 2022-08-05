@@ -1,6 +1,7 @@
 package com.skillstorm.hotel.models;
 
 import java.sql.Date;
+import java.time.LocalDate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -45,11 +46,11 @@ public class Reservations {
 	
 	@Column(name = "checkin")
 	@NotNull
-	private Date checkin;
+	private LocalDate checkin;
 	
 	@Column (name = "checkout")
 	@NotNull
-	private Date checkout;
+	private LocalDate checkout;
 
 	/////////////////////////////////////////////////////////////////
 	/////////////////////////// Constructors ////////////////////////
@@ -61,7 +62,7 @@ public class Reservations {
 	}
 
 	// Constructor using all the fields
-	public Reservations(int reservationId, int roomnumber, HotelUsers users, Date checkin, Date checkout) {
+	public Reservations(int reservationId, int roomnumber, HotelUsers users, LocalDate checkin, LocalDate checkout) {
 		super();
 		this.reservationId = reservationId;
 		this.roomnumber = roomnumber;
@@ -71,7 +72,7 @@ public class Reservations {
 	}
 
 	// Constructor using all the fields except id
-	public Reservations(int roomnumber, HotelUsers users, Date checkin, Date checkout) {
+	public Reservations(int roomnumber, HotelUsers users, LocalDate checkin, LocalDate checkout) {
 		super();
 		this.roomnumber = roomnumber;
 		this.users = users;
@@ -108,19 +109,19 @@ public class Reservations {
 		this.users = users;
 	}
 
-	public Date getCheckin() {
+	public LocalDate getCheckin() {
 		return checkin;
 	}
 
-	public void setCheckin(Date checkin) {
+	public void setCheckin(LocalDate checkin) {
 		this.checkin = checkin;
 	}
 
-	public Date getCheckout() {
+	public LocalDate getCheckout() {
 		return checkout;
 	}
 
-	public void setCheckout(Date checkout) {
+	public void setCheckout(LocalDate checkout) {
 		this.checkout = checkout;
 	}
 
