@@ -54,12 +54,23 @@ public class ReservationsController {
 	///////////////////////////// Methods ///////////////////////////
 	/////////////////////////////////////////////////////////////////
 
-	//Get All Hotel Reservations
+	//Get a page of Hotel Reservations
 	@GetMapping
 	public List<ReservationInfoDto> getReservations(@RequestParam(defaultValue = "1") int page, 
 	@RequestParam(defaultValue = "3") int limit) {
 		List<ReservationInfoDto> info = new ArrayList<>();
 		List<Reservations> reservations = reservationsService.getReservations(page, limit);
+		for (Reservations reservation : reservations) {
+			info.add(DtoUtils.create(reservation));
+		}
+		return info;
+	}
+	
+	//Get All Hotel Reservations
+	@GetMapping("/all")
+	public List<ReservationInfoDto> getAllReservations() {
+		List<ReservationInfoDto> info = new ArrayList<>();
+		List<Reservations> reservations = reservationsService.getAllReservations();
 		for (Reservations reservation : reservations) {
 			info.add(DtoUtils.create(reservation));
 		}
@@ -100,9 +111,13 @@ public class ReservationsController {
 //		return reservationsService.addNewReservations(reservations);
 //	}
 	
-	@PutMapping // TODO add @Valid
-	@CrossOrigin("*")
-	public ResponseEntity<ReservationInfoDto> updateReservation(@RequestBody ReservationInfoDto info) {
+	@PutMapping("/{id}") // TODO add @Valid
+	@CrossOrigin("*")	
+	public ResponseEntity<ReservationInfoDto> updateReservation(@RequestBody ReservationInfoDto info,  @PathVariable int id) {
+
+		System.out.println("=================================");
+		System.out.println("Hi, I'm the Controller. Updating the reservation: " + info);
+		System.out.println("=================================");
 		info = reservationsService.updateReservations(info); // save response (should have updated reservationid and maybe userid)
 		return new ResponseEntity<ReservationInfoDto>(info, info == null ? HttpStatus.INTERNAL_SERVER_ERROR : HttpStatus.CREATED);
 	}

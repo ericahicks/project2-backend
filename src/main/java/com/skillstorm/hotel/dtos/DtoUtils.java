@@ -30,7 +30,7 @@ public class DtoUtils {
 		HotelUsers user = new HotelUsers(info.getUserid(), info.getFirstName(), info.getLastName(), info.getPhonenumber(), info.getEmail());
 		// constructor that uses all fields except id 
 		// params (int roomnumber, HotelUsers users, Date checkin, Date checkout)
-		return new Reservations(info.getRoomnumber(), user, info.getCheckin(), info.getCheckin());
+		return new Reservations(info.getReservationId(), info.getRoomnumber(), user, info.getCheckin(), info.getCheckout());
 	}
 	
 	public static HotelUsers getUser(ReservationInfoDto info) {

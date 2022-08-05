@@ -48,11 +48,17 @@ public class HotelUsersController {
 	///////////////////////////// Methods ///////////////////////////
 	/////////////////////////////////////////////////////////////////
 
-	// This method gets all the Users from the Db
+	// This method gets the Users requested page of users from the Db
 	@GetMapping
 	public List<HotelUsers> getUsers(@RequestParam(defaultValue = "1") int page, 
 			@RequestParam(defaultValue = "3") int limit) {
 		return usersService.getUsers(--page, limit);
+	}
+	
+	// This method gets all the Users from the Db
+	@GetMapping("/all")
+	public List<HotelUsers> getAllUsers() {
+		return usersService.getAllUsers();
 	}
 	
 	@GetMapping("/{id}")
@@ -62,8 +68,10 @@ public class HotelUsersController {
 
 	// This Method will allow users to Create a new Account
 	@PostMapping
-	@ResponseStatus(HttpStatus.CREATED)
-	public HotelUsers createNewUser(@Valid @RequestBody HotelUsers hotelUser) {
+	@ResponseStatus(HttpStatus.CREATED) // TODO add @Valid 
+	public HotelUsers createNewUser(@RequestBody HotelUsers hotelUser) {
+		System.out.println("=================================");
+		System.out.println("Hi, I'm the controller. Saving new user: " + hotelUser);
 		return usersService.addNewUser(hotelUser);
 	}
 

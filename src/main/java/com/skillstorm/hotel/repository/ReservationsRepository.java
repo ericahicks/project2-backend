@@ -21,9 +21,9 @@ public interface ReservationsRepository extends JpaRepository<Reservations, Inte
 	@Query("SELECT "
 			+ "COUNT(*) > 0 "
 			+ "FROM Reservations r "
-			+ "WHERE r.roomnumber = ?1 "
+			+ "WHERE r.roomnumber = ?1 AND r.reservationId != ?4 "
 			+ "AND ((r.checkin <= ?2 AND r.checkout > ?2) OR (r.checkin >= ?2 AND r.checkin < ?3))")
-	boolean existsOverlappingReservationsByRoom(int roomnumber, Date checkin, Date checkout);
+	boolean existsOverlappingReservationsByRoom(int roomnumber, Date checkin, Date checkout, int reservationId);
 	
 	
 }

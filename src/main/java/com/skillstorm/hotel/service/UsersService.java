@@ -48,6 +48,10 @@ public class UsersService {
 		return usersRepository.findAll(PageRequest.of(page, limit)).toList();
 	}
 	
+	public List<HotelUsers> getAllUsers() {
+		return usersRepository.findAll();
+	}
+	
 	public HotelUsers getUsersById(int id) {
 		Optional<HotelUsers> users = usersRepository.findById(id);
 		return users.isPresent() ? users.get() : null;
@@ -55,12 +59,13 @@ public class UsersService {
 	
 	@Transactional
 	public HotelUsers addNewUser(HotelUsers hotelUser) {
+		System.out.println("=================================");
+		System.out.println("Hi, I'm the Service. Saving new user: " + hotelUser);
 		Optional<HotelUsers> userOptional =  usersRepository.findUserByEmail(hotelUser.getEmail());
 		if(userOptional.isPresent()) {
 			throw new IllegalComponentStateException("This Email Has Already Been Taken"); // Runtime Exception will cause Rollback!
 		}
 		return usersRepository.save(hotelUser);
-		
 	}
 	
 	@Transactional

@@ -51,6 +51,10 @@ public class ReservationsService {
 		return reservationsRepository.findAll(PageRequest.of(page, limit)).toList();
 	}
 	
+	public List<Reservations> getAllReservations(){
+		return reservationsRepository.findAll();
+	}
+	
 	public Reservations getReservationsById(int id) {
 		Optional<Reservations> reservations = reservationsRepository.findById(id);
 		return reservations.isPresent() ? reservations.get() : null;
@@ -76,10 +80,10 @@ public class ReservationsService {
 	
 	@Transactional
 	public Reservations addNewReservations(Reservations reservations) {
-		Optional<Reservations> reservationOptional = reservationsRepository.findReservationByreservationId(reservations.getReservationId());
-		if(reservationOptional.isPresent()) {
-			throw new IllegalStateException("This Reservation ID is already in use.");
-		}
+//		Optional<Reservations> reservationOptional = reservationsRepository.findReservationByreservationId(reservations.getReservationId());
+//		if(reservationOptional.isPresent()) {
+//			throw new IllegalStateException("This Reservation ID is already in use.");
+//		}
 		// Check if user exists and create if necessary
 		HotelUsers users = reservations.getUsers();
 		if (usersService.existsById(users.getId())) {
@@ -92,7 +96,11 @@ public class ReservationsService {
 		if (reservationsRepository
 				.existsOverlappingReservationsByRoom(reservations.getRoomnumber(), 
 						                               reservations.getCheckin(), 
-						                               reservations.getCheckout() )) {
+						                               reservations.getCheckout(), 
+						                               0 // reservations.getReservationId() new so 0
+						                             ) // end parameters list
+			) // end if conditional statement
+		{
 			throw new IllegalStateException("Room " + reservations.getRoomnumber() + " is not availble the requested dates.");
 		}
 		return reservationsRepository.save(reservations);
@@ -126,14 +134,22 @@ public class ReservationsService {
 		if (reservationsRepository
 				.existsOverlappingReservationsByRoom(reservations.getRoomnumber(), 
 						                               reservations.getCheckin(), 
-						                               reservations.getCheckout() )) {
+						                               reservations.getCheckout(),
+						                               reservations.getReservationId() 
+						                             ) // end parameters list
+			) // end if conditional statement
+		{ 
 			throw new IllegalStateException("Room " + reservations.getRoomnumber() + " is not availble the requested dates.");
 		}
 		System.out.println("=========================");
-		System.out.println("Saving reservation: " + reservations);
+		System.out.println("Hi, I'm the Service. Saving reservation: " + reservations);
 		System.out.println("    where user: " + reservations.getUsers());
+		Reservations res = reservationsRepository.save(reservations);
+		System.out.println("Thanks Repository! Saved reservation is: " + res);
+		reservationInfo = DtoUtils.create(res);
+		System.out.println("    Converted to DTO reservation is: " + reservationInfo);
 		System.out.println("=========================");
-		return DtoUtils.create(reservationsRepository.save(reservations));
+		return reservationInfo;
 	}
 	
 	@Transactional
