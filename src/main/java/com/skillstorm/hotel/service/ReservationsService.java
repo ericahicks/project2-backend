@@ -132,7 +132,7 @@ public class ReservationsService {
 	@Transactional
 	public ReservationInfoDto updateReservations(ReservationInfoDto reservationInfo) {
 		
-		// Step 1: Convert Dto to reservation object
+		// Step 1: Convert Dto (info) to reservation object
 		Reservations reservations = DtoUtils.getReservation(reservationInfo);
 		HotelUsers users = DtoUtils.getUser(reservationInfo);
 		
@@ -149,7 +149,7 @@ public class ReservationsService {
 						                             ) // end parameters list
 			) // end if conditional statement
 		{ 
-			throw new IllegalStateException("Room " + reservations.getRoomnumber() + " is not availble the requested dates.");
+			throw new IllegalStateException("Room " + reservations.getRoomnumber() + " is not availble on the requested dates.");
 		}
 		System.out.println("=========================");
 		System.out.println("Hi, I'm the Service. Saving reservation: " + reservations);
