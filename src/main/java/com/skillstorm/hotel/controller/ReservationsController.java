@@ -77,6 +77,13 @@ public class ReservationsController {
 		return info;
 	}
 	
+	@GetMapping("/user/{userid}")
+	public ResponseEntity<List<ReservationInfoDto>> getUsersReservationsByUserId(@PathVariable String userid) {
+		List<ReservationInfoDto> reservations = reservationsService.getReservationInfoByUserId(userid);
+		return new ResponseEntity<>(reservations, reservations.size() == 0 ? HttpStatus.BAD_REQUEST : HttpStatus.OK);
+	}
+	
+	// Get method using post bc email in url is weird
 	@PostMapping("/user")
 	public ResponseEntity<List<ReservationInfoDto>> getUsersReservations(@RequestBody String body) {
 		System.out.println("Request Body was: " + body);

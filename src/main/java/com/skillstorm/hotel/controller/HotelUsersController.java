@@ -6,6 +6,7 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -61,9 +62,18 @@ public class HotelUsersController {
 		return usersService.getAllUsers();
 	}
 	
+	// This method finds a user by id
 	@GetMapping("/{id}")
 	public HotelUsers getUsersById(@PathVariable int id) {
 		return usersService.getUsersById(id);
+	}
+	
+	// This method finds a user's id by email
+	@GetMapping("/email")
+	public ResponseEntity<Integer> getUsersByEmail(@RequestBody String email) {
+		HotelUsers user = usersService.getUsersByEmail(email);
+		Integer id = user == null ? 0 : user.getId();
+		return new ResponseEntity<>(id, id == 0 ? HttpStatus.BAD_REQUEST : HttpStatus.OK);
 	}
 
 	// This Method will allow users to Create a new Account

@@ -66,10 +66,25 @@ public class ReservationsService {
 		return null;
 	}
 	
+	// This method gets all the reservations associated with a given user email
 	public List<ReservationInfoDto> getReservationInfoByEmail(String email) {
 		List<ReservationInfoDto> info = new ArrayList<>();
+		// Get reservations
 		List<Reservations> reservations = reservationsRepository.findByEmail(email);
+		// Convert to DTOs to send back to frontend
 		for (Reservations reservation : reservations) {
+			info.add(DtoUtils.create(reservation));
+		}
+		return info;
+	}
+	
+	// This method gets all the reservations associated with a given userid
+	public List<ReservationInfoDto> getReservationInfoByUserId(String userid) {
+		List<ReservationInfoDto> info = new ArrayList<>();
+		// Get reservations
+		List<Reservations> reservations = reservationsRepository.findByUsersId(Integer.parseInt(userid));
+		// Convert to DTOs to send back to frontend
+		for (Reservations reservation : reservations ) {
 			info.add(DtoUtils.create(reservation));
 		}
 		return info;
@@ -121,12 +136,9 @@ public class ReservationsService {
 		Reservations reservations = DtoUtils.getReservation(reservationInfo);
 		HotelUsers users = DtoUtils.getUser(reservationInfo);
 		
-		// Step 2: Check if user exists and create if necessary
-//		HotelUsers users = reservations.getUsers();
-//		if (usersService.existsById(users.getId())) {
+		// Step 2: 
 			users = usersService.updateUser(users); // save or update ALWAYS
 			reservations.setUsers(users); // set id in case changed
-//		}
 		
 		// Step 3: Check if valid repository room/dates
 		if (reservationsRepository

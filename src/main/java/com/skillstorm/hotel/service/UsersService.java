@@ -57,6 +57,11 @@ public class UsersService {
 		return users.isPresent() ? users.get() : null;
 	}
 	
+	public HotelUsers getUsersByEmail(String email) {
+		Optional<HotelUsers> users = usersRepository.findUserByEmail(email);
+		return users.isPresent() ? users.get() : null;
+	}
+	
 	@Transactional
 	public HotelUsers addNewUser(HotelUsers hotelUser) {
 		System.out.println("=================================");
