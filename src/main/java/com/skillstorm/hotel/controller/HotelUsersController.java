@@ -69,7 +69,7 @@ public class HotelUsersController {
 	}
 	
 	// This method finds a user's id by email
-	@GetMapping("/email")
+	@PostMapping("/email") // Using POST for a GET bc email in url is weird
 	public ResponseEntity<Integer> getUsersByEmail(@RequestBody String email) {
 		HotelUsers user = usersService.getUsersByEmail(email);
 		Integer id = user == null ? 0 : user.getId();
