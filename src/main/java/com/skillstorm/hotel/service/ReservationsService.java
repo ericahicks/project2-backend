@@ -114,7 +114,7 @@ public class ReservationsService {
 						                             ) // end parameters list
 			) // end if conditional statement
 		{
-			throw new IllegalStateException("Room " + reservations.getRoomnumber() + " is not availble the requested dates.");
+			throw new IllegalStateException("Room " + reservations.getRoomnumber() + " is not availble on the requested dates.");
 		}
 		return reservationsRepository.save(reservations);
 	}

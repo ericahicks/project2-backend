@@ -1,6 +1,11 @@
 package com.skillstorm.hotel.dtos;
 
 import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
 
 
 public class ReservationInfoDto {
@@ -13,6 +18,8 @@ public class ReservationInfoDto {
 	private int reservationId;
 	
 	private int roomnumber;
+	
+	
 	
 	private LocalDate checkin;
 	
