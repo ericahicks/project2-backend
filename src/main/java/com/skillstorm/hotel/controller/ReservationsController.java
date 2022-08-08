@@ -143,6 +143,8 @@ public class ReservationsController {
 	
 	@DeleteMapping("/{id}")
 	public void delete(@PathVariable int id) {
+		System.out.println("========================================================");
+		System.out.println("Hi, I'm the Controller, here to delete your reservation #" + id);
 		reservationsService.deleteReservation(id);
 	}
 
