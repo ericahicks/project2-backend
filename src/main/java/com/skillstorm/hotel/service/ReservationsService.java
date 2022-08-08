@@ -180,9 +180,6 @@ public class ReservationsService {
 		if (reservationsRepository.existsById(id)) {
 			System.out.println("Yup, I see that reservation exists. Let me just obliterate it's existance for you. No problem.");
 			reservationsRepository.deleteById(id);
-			if (reservationsRepository.existsById(id)) {
-				System.out.println("Uhm... about that. Something clearly went wrong. Uh that reservation you didn't like. It's still here. Ya sorry bout that.");
-			}
 		} // else your work is done!
 	}
 	
