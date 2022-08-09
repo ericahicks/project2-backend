@@ -38,17 +38,8 @@ public class ReservationsController {
 	/////////////////////////////////////////////////////////////////
 	private static final Logger log = LoggerFactory.getLogger(ReservationsController.class);
 	
-
-	private final ReservationsService reservationsService;
-
-	/////////////////////////////////////////////////////////////////
-	/////////////////////////// Constructor /////////////////////////
-	/////////////////////////////////////////////////////////////////
 	@Autowired
-	public ReservationsController(ReservationsService reservationsService) {
-		super();
-		this.reservationsService = reservationsService;
-	}
+	private ReservationsService reservationsService;
 
 	/////////////////////////////////////////////////////////////////
 	///////////////////////////// Methods ///////////////////////////
@@ -77,12 +68,20 @@ public class ReservationsController {
 		return info;
 	}
 	
+	@GetMapping("/room/{number}")
+	public ResponseEntity<List<ReservationInfoDto>> findByRoomnumber(@PathVariable int number) {
+		List<ReservationInfoDto> reservations = reservationsService.findByRoomnumber(number);
+		return new ResponseEntity<>(reservations, reservations != null && reservations.size() > 0 ? HttpStatus.OK : HttpStatus.NOT_FOUND);
+	}
+	
+	// Get all reservations for the user with an id of userid
 	@GetMapping("/user/{userid}")
 	public ResponseEntity<List<ReservationInfoDto>> getUsersReservationsByUserId(@PathVariable String userid) {
 		List<ReservationInfoDto> reservations = reservationsService.getReservationInfoByUserId(userid);
 		return new ResponseEntity<>(reservations, reservations.size() == 0 ? HttpStatus.BAD_REQUEST : HttpStatus.OK);
 	}
 	
+	// Get all reservations for the user with the email contained in the body
 	// Get method using post bc email in url is weird
 	@PostMapping("/user")
 	public ResponseEntity<List<ReservationInfoDto>> getUsersReservations(@RequestBody String body) {
@@ -91,6 +90,7 @@ public class ReservationsController {
 		return new ResponseEntity<>(reservations, reservations.size() > 0 ? HttpStatus.OK : HttpStatus.BAD_REQUEST);
 	}
 	
+	// Get the details of the reservation with the provided id number
 	@GetMapping("/{id}")
 	public ResponseEntity<ReservationInfoDto> getReservationsById(@PathVariable int id) {
 		ReservationInfoDto reservation = reservationsService.getReservationInfoById(id);
@@ -100,13 +100,8 @@ public class ReservationsController {
 		return new ResponseEntity<>(reservation, HttpStatus.OK);
 	}
 	
-//	@GetMapping("/{id}")
-//	public Reservations getReservationsById(@PathVariable int id) {
-//		return reservationsService.getReservationsById(id);
-//	}
-	
-	@PostMapping("/new") 
-	@CrossOrigin("*")
+	// Create a reservation from the provided reservation info
+	@PostMapping // TODO add @Valid
 	public ResponseEntity<ReservationInfoDto> createNewReservation(@RequestBody ReservationInfoDto info) {
 		System.out.println("=================================");
 		System.out.println("Hi, I'm the Reservation Controller.I will create a new reservation: " + info);
@@ -115,13 +110,7 @@ public class ReservationsController {
 		return new ResponseEntity<ReservationInfoDto>(info, info == null ? HttpStatus.INTERNAL_SERVER_ERROR : HttpStatus.CREATED);
 	}
 	
-	//This Method Adds a new Reservations To the DB
-//	@PostMapping
-//	@ResponseStatus(HttpStatus.CREATED)
-//	public Reservations createNewReservation(@Valid @RequestBody Reservations reservations) {
-//		return reservationsService.addNewReservations(reservations);
-//	}
-	
+	// Update the reservation with the provided id
 	@PutMapping("/{id}") // TODO add @Valid
 	@CrossOrigin("*")	
 	public ResponseEntity<ReservationInfoDto> updateReservation(@RequestBody ReservationInfoDto info,  @PathVariable int id) {
@@ -133,14 +122,7 @@ public class ReservationsController {
 		return new ResponseEntity<ReservationInfoDto>(info, info == null ? HttpStatus.INTERNAL_SERVER_ERROR : HttpStatus.CREATED);
 	}
 	
-        // update
-//	@PutMapping("/{id}")
-//	public Reservations update(@Valid @RequestBody Reservations reservations, @PathVariable int id) {
-//		log.debug("Updating reservation with id=" + id + ", reservation=" + reservations);
-//		// business logic in service class to check if user in the reservation is new or old
-//		return reservationsService.addNewReservations(reservations);
-//	}
-	
+	// Delete the reservation with the provided id number
 	@DeleteMapping("/{id}")
 	public void delete(@PathVariable int id) {
 		System.out.println("========================================================");
