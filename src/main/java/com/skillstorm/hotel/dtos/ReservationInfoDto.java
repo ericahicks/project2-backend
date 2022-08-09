@@ -1,48 +1,55 @@
 package com.skillstorm.hotel.dtos;
 
+import java.math.BigInteger;
 import java.time.LocalDate;
 
-
 public class ReservationInfoDto {
-	
 
 	/////////////////////////////////////////////////////////////////
 	//////////////////////// Instance Variables /////////////////////
 	/////////////////////////////////////////////////////////////////
-	
-	private int reservationId;
-	
-	private int roomnumber;
-	
-	private LocalDate checkin;
-	
-	private LocalDate checkout;
-	
-	private int userid;
-	
-	private String firstName;
-	
-	private String lastName;
-	
-	private String phonenumber;
-	
-	private String email;
 
+	private int reservationId;
+
+	private int roomnumber;
+
+	private int roomTypeId;
+
+	private String roomTypeName;
+
+	private BigInteger price;
+
+	private LocalDate checkin;
+
+	private LocalDate checkout;
+
+	private int userid;
+
+	private String firstName;
+
+	private String lastName;
+
+	private String phonenumber;
+
+	private String email;
 
 	/////////////////////////////////////////////////////////////////
 	//////////////////////// Constructors ///////////////////////////
 	/////////////////////////////////////////////////////////////////
-	
-	
+
 	public ReservationInfoDto() {
 		super();
 	}
 
-	public ReservationInfoDto(int reservationId, int roomnumber, LocalDate checkin, LocalDate checkout, int userid,
-			String firstName, String lastName, String phonenumber, String email) {
+	public ReservationInfoDto(int reservationId, int roomnumber, int roomTypeId, String roomTypeName, BigInteger price,
+			LocalDate checkin, LocalDate checkout, int userid, String firstName, String lastName, String phonenumber,
+			String email) {
 		super();
 		this.reservationId = reservationId;
 		this.roomnumber = roomnumber;
+		this.roomTypeId = roomTypeId;
+		this.roomTypeName = roomTypeName;
+		this.price = price;
 		this.checkin = checkin;
 		this.checkout = checkout;
 		this.userid = userid;
@@ -128,10 +135,39 @@ public class ReservationInfoDto {
 		this.email = email;
 	}
 
+	public int getRoomTypeId() {
+		return roomTypeId;
+	}
+
+	public void setRoomTypeId(int roomTypeId) {
+		this.roomTypeId = roomTypeId;
+	}
+
+	public String getRoomTypeName() {
+		return roomTypeName;
+	}
+
+	public void setRoomTypeName(String roomType) {
+		this.roomTypeName = roomType;
+	}
+
+	public BigInteger getPrice() {
+		return price;
+	}
+
+	public void setPrice(BigInteger price) {
+		this.price = price;
+	}
+
+	/////////////////////////////////////////////////////////////////
+	//////////////////////////// Other Methods //////////////////////
+	/////////////////////////////////////////////////////////////////
+
 	@Override
 	public String toString() {
-		return "ReservationInfoDto [reservationId=" + reservationId + ", roomnumber=" + roomnumber + ", checkin="
-				+ checkin + ", checkout=" + checkout + ", userid=" + userid + ", firstName=" + firstName + ", lastName="
+		return "ReservationInfoDto [reservationId=" + reservationId + ", roomnumber=" + roomnumber + ", roomTypeId="
+				+ roomTypeId + ", roomTypeName=" + roomTypeName + ", price=" + price + ", checkin=" + checkin
+				+ ", checkout=" + checkout + ", userid=" + userid + ", firstName=" + firstName + ", lastName="
 				+ lastName + ", phonenumber=" + phonenumber + ", email=" + email + "]";
 	}
 
@@ -159,5 +195,5 @@ public class ReservationInfoDto {
 			return false;
 		return true;
 	}
-	
+
 }

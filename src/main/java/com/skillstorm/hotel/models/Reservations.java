@@ -22,9 +22,6 @@ import com.fasterxml.jackson.annotation.JsonIdentityReference;
 @Table(name = "reservation")
 public class Reservations {
 	
-	private static final int MIN_ROOMNUMBER = 100;
-	private static final int MAX_ROOMNUMBER = 520;
-	
 	/////////////////////////////////////////////////////////////////
 	////////////////////// Instance Variables  //////////////////////
 	/////////////////////////////////////////////////////////////////
@@ -34,10 +31,10 @@ public class Reservations {
 	@Column(name = "reservationid")
 	private int reservationId;
 	
-	@Column(name = "roomnumber")
-	@Min(MIN_ROOMNUMBER)
-	@Max(MAX_ROOMNUMBER)
-	private int roomnumber;
+	@ManyToOne
+	@JoinColumn(name = "roomnumber")
+	@JsonIdentityReference(alwaysAsId = true)
+	private Rooms room;
 	
 	@ManyToOne
 	@JoinColumn(name="userid")
@@ -62,19 +59,20 @@ public class Reservations {
 	}
 
 	// Constructor using all the fields
-	public Reservations(int reservationId, int roomnumber, HotelUsers users, LocalDate checkin, LocalDate checkout) {
+	public Reservations(int reservationId, Rooms room, HotelUsers users, @NotNull LocalDate checkin,
+			@NotNull LocalDate checkout) {
 		super();
 		this.reservationId = reservationId;
-		this.roomnumber = roomnumber;
+		this.room = room;
 		this.users = users;
 		this.checkin = checkin;
 		this.checkout = checkout;
 	}
 
 	// Constructor using all the fields except id
-	public Reservations(int roomnumber, HotelUsers users, LocalDate checkin, LocalDate checkout) {
+	public Reservations(Rooms room, HotelUsers users, @NotNull LocalDate checkin, @NotNull LocalDate checkout) {
 		super();
-		this.roomnumber = roomnumber;
+		this.room = room;
 		this.users = users;
 		this.checkin = checkin;
 		this.checkout = checkout;
@@ -93,12 +91,12 @@ public class Reservations {
 		this.reservationId = reservationId;
 	}
 
-	public int getRoomnumber() {
-		return roomnumber;
+	public Rooms getRoom() {
+		return room;
 	}
 
-	public void setRoomnumber(int roomnumber) {
-		this.roomnumber = roomnumber;
+	public void setRoom(Rooms room) {
+		this.room = room;
 	}
 
 	public HotelUsers getUsers() {
@@ -129,11 +127,6 @@ public class Reservations {
 	/////////////////////////// Other Methods ///////////////////////
 	/////////////////////////////////////////////////////////////////
 
-	@Override
-	public String toString() {
-		return "Reservations [reservationId=" + reservationId + ", roomnumber=" + roomnumber + ", users=" + users
-				+ ", checkin=" + checkin + ", checkout=" + checkout + "]";
-	}
 
 	@Override
 	public int hashCode() {
@@ -141,6 +134,12 @@ public class Reservations {
 		int result = 1;
 		result = prime * result + reservationId;
 		return result;
+	}
+
+	@Override
+	public String toString() {
+		return "Reservations [reservationId=" + reservationId + ", room=" + room + ", users=" + users + ", checkin="
+				+ checkin + ", checkout=" + checkout + "]";
 	}
 
 	@Override

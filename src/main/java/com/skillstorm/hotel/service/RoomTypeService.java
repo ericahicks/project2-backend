@@ -1,6 +1,7 @@
 package com.skillstorm.hotel.service;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,16 +13,15 @@ import com.skillstorm.hotel.repository.RoomTypeRepository;
 public class RoomTypeService {
 	
 	@Autowired
-	private final RoomTypeRepository roomtypeRepository;
+	private RoomTypeRepository roomtypeRepository;
 
-	public RoomTypeService(RoomTypeRepository roomtypeRepository) {
-		//super();
-		this.roomtypeRepository = roomtypeRepository;
-	}
-	
 	public List<RoomTypes> getRoomTypes(){
 		return roomtypeRepository.findAll();
 	}
 	
+	public RoomTypes findById(int id) {
+		Optional<RoomTypes> roomType = roomtypeRepository.findById(id);
+		return roomType.isPresent() ? roomType.get() : null;
+	}
 
 }
