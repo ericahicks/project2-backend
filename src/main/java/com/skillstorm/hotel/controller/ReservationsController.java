@@ -103,6 +103,9 @@ public class ReservationsController {
 	// Create a reservation from the provided reservation info
 	@PostMapping // TODO add @Valid
 	public ResponseEntity<ReservationInfoDto> createNewReservation(@RequestBody ReservationInfoDto info) {
+		System.out.println("=================================");
+		System.out.println("Hi, I'm the Reservation Controller.I will create a new reservation: " + info);
+		System.out.println("=================================");
 		info = reservationsService.addNewReservations(info); // save response (should have updated reservationid and maybe userid)
 		return new ResponseEntity<ReservationInfoDto>(info, info == null ? HttpStatus.INTERNAL_SERVER_ERROR : HttpStatus.CREATED);
 	}

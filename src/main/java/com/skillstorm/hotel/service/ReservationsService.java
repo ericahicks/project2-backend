@@ -143,7 +143,7 @@ public class ReservationsService {
 	@Transactional
 	public ReservationInfoDto updateReservations(ReservationInfoDto reservationInfo) {
 		
-		// Step 1: Convert Dto to reservation object
+		// Step 1: Convert Dto (info) to reservation object
 		Reservations reservations = DtoUtils.getReservation(reservationInfo);
 		HotelUsers users = DtoUtils.getUser(reservationInfo);
 		
@@ -173,7 +173,7 @@ public class ReservationsService {
 		System.out.println("Hi, I'm the Service. Saving reservation: " + reservations);
 		System.out.println("    where user: " + reservations.getUsers());
 		Reservations res = reservationsRepository.save(reservations);
-		System.out.println("Thanks Repository! Saved reservation is: " + res);
+		System.out.println("Thanks Repository!!! Saved reservation is: " + res);
 		reservationInfo = DtoUtils.create(res);
 		System.out.println("    Converted to DTO reservation is: " + reservationInfo);
 		System.out.println("=========================");
