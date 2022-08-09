@@ -60,5 +60,17 @@ public class DtoUtils {
 		RoomTypes roomType = getRoomType(info);
 		return new Rooms(info.getRoomnumber(), roomType, null);
 	}
+
+	////////////////////////////////////////////////////////////////////
+	/////////////////////// RoomTypeDto Utilities //////////////////////
+	////////////////////////////////////////////////////////////////////
+	
+	public static RoomTypeDto create(RoomTypes type) {
+		RoomTypeDto typeDto = new RoomTypeDto();
+		typeDto.setName(type.getName());
+		typeDto.setPrice(type.getPrice());
+		typeDto.setRoomtypeid(type.getRoomtypeid());
+		return typeDto;
+	}
 	
 }

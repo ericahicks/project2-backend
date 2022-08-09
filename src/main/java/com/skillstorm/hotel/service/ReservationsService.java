@@ -15,7 +15,6 @@ import com.skillstorm.hotel.dtos.DtoUtils;
 import com.skillstorm.hotel.dtos.ReservationInfoDto;
 import com.skillstorm.hotel.models.HotelUsers;
 import com.skillstorm.hotel.models.Reservations;
-import com.skillstorm.hotel.models.Rooms;
 import com.skillstorm.hotel.repository.ReservationsRepository;
 
 @Service
